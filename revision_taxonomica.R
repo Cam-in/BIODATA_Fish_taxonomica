@@ -12,8 +12,7 @@ library(ggplot2)
 
 #datos----
 
-estudio_aves <- read.csv("estudio_aves.csv", fileEncoding = "UTF-8", sep = ";",
-                         na = "")
+estudio_taxon <- read.csv(file="fish_joint_data_2000_2025.txt", sep="\t")
 
 
 #marcar datos conflictivos-----
@@ -95,6 +94,7 @@ aves_corregido <- aves_sag %>%
                       nombre_cientifico_sag == revision_taxonomica_sag$canonicalName
                       ~ nombre_cientifico_sag
                     ))
+
 
 
 
