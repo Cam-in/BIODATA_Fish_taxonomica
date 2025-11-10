@@ -20,5 +20,6 @@ Copiamos el Repositorio de "revision_taxonomica" y comenzamos a trabajar en él
 ### Links de interés
 * Documentación RGBIF: https://docs.ropensci.org/rgbif/articles/rgbif.html
 * Tutorial OURCODINGCLUB: https://ourcodingclub.github.io/tutorials/occurrence/
+* Tutorial GitHub: https://ourcodingclub.github.io/tutorials/git/
 * Documentación GitHub:https://docs.github.com/es/get-started/start-your-journey/about-github-and-git
 * Ejemplo Hello World: https://docs.github.com/es/get-started/start-your-journey/hello-world
