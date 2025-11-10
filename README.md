@@ -1,18 +1,18 @@
-# Tutorial para la comparación taxonómica con RGBIF
-Creado por: Catalina Marín Cruz , Data Manager Instituto Milenio BASE
+# Tutorial para la comprender creación de Fork, pull, push
+# Colaboración en código
+Creado por: 
+- Camila Neder, Instituto Milenio BASE
+- Julián Caro, Instituto de Ecología y Biodiversidad
+- Con base de código para Fork desde Catalina Marín Cruz , Data Manager Instituto Milenio BASE
 
 ## Instrucciones previas
-No olvides que para utilizar rgbif necesitas tener una cuenta, puedes ingresar a https://www.gbif.org/es/ y registrarte.
-
-Recuerda tu nombre de usuario, correo y contraseña
+Copiamos el Repositorio de "revision_taxonomica" y comenzamos a trabajar en él
 
 ## Archivos de este repositorio
-
-* aves_estudio.csv : Lista de especies de aves avistadas durante monitoreo
+* estudio_taxon : Lista de especies de peces
 * revision_taxonomica.R : script para comparar información taxonómica
 
 ## Qué veremos en la sesión
-
 * Revisión taxonómica con rgbif/name_backbone_checklist
 * Exploración y resumen básico de los datos con el paquete dplyr
 * Elaboración de gráfico básico con el paquete ggplot2
@@ -20,4 +20,5 @@ Recuerda tu nombre de usuario, correo y contraseña
 ### Links de interés
 * Documentación RGBIF: https://docs.ropensci.org/rgbif/articles/rgbif.html
 * Tutorial OURCODINGCLUB: https://ourcodingclub.github.io/tutorials/occurrence/
-* Estudio Evaluación de Impacto Ambiental Parque Eólico Rinconada https://seia.sea.gob.cl/busqueda/buscarProyectoResumen.php?nombre=Parque%20E%F3lico%20Rinconada
+* Documentación GitHub:https://docs.github.com/es/get-started/start-your-journey/about-github-and-git
+* Ejemplo Hello World: https://docs.github.com/es/get-started/start-your-journey/hello-world
