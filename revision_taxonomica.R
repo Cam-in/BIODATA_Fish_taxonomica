@@ -1,6 +1,6 @@
-#Trabajo con taxonomía de aves
+#Trabajo con taxonomía de peces
 #2025-10-28
-#Catalina Marín Cruz
+#Camila Neder & Julián Caro, usando fork e Catalina Marin
 
 #settings####
 
@@ -28,73 +28,68 @@ n_conflictos <- aves_marcado %>%
                 group_by(conflicto) %>% 
                 summarise( conteo = n())
 
-#validación taxonomica-----
-#validación taxonómica sacc-----
-revision_taxonomica_sacc <- name_backbone_checklist(aves_marcado$nombre_cientifico_sacc) #revision taxonómica según sacc
+#conteo de datos de categoría de peces por diferentes fuentes---
+n_origendatos <- taxon_check %>% 
+  group_by(Category, preferred_source) %>% 
+  summarise(conteo = n(), .groups = "drop")
 
-conteo_matchtype1 <- revision_taxonomica_sacc %>%
-                      group_by(matchType) %>% 
-                      summarise(conteo = n())
-fuzzy_taxsacc <- revision_taxonomica_sacc %>% 
-                 filter(matchType == "FUZZY")
 
-#validación taxonomica sag----
-
-revision_taxonomica_sag <- name_backbone_checklist(aves_marcado$nombre_cientifico_sag) #revision taxonómica según sag
-
-conteo_matchtype2 <- revision_taxonomica_sag %>%
-  group_by(matchType) %>% 
-  summarise(conteo = n())
-
-fuzzy_taxsag <- revision_taxonomica_sag %>% 
-  filter(matchType == "FUZZY")
-
-HR_taxsag <- revision_taxonomica_sag %>% 
-  filter(matchType == "HIGHERRANK")
-
-#gráfico comparativo-----
-datos_grafico <- inner_join(conteo_matchtype1, conteo_matchtype2)
-
-grafico_comparativo <- ggplot() +
-  geom_col(data = conteo_matchtype1, 
-           aes(x = matchType, y = conteo, fill = "SACC"),
-           position = position_nudge(0.22),
-           width = 0.4) +
-  geom_col(data = conteo_matchtype2, 
-           aes(x = matchType, y = conteo, fill = "SAG"),
-           position = position_nudge(-0.22),
-           width = 0.4) +
+#gráfico por categoría----- 
+grafico_category_source <- ggplot(n_origendatos, aes(x = Category, y = conteo, fill = preferred_source)) +
+  geom_bar(stat = "identity", 
+           position = position_dodge(width = 0.8),
+           width = 0.7) +
   scale_fill_manual(
     name = "Fuente",
-    values = c("SACC" = "blue", "SAG" = "red")
+    values = c("GBIF" = "green", "OBIS" = "blue3", "Desconocido" = "grey70")
   ) +
-  theme_minimal()
-                  
-print(grafico_comparativo)
+  labs(
+    title = "Comparativo de registros por Categoría y Fuente",
+    x = "Categoría",
+    y = "Número de registros"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 25, hjust = 1),
+    legend.position = "right"
+  )
 
-#reemplazar datos conflictivos con taxonomía GBIF----
-
-aves_sag <- aves_marcado %>% 
-            select(orden_sag, 
-                   familia_sag, 
-                   nombre_cientifico_sag)
-
-aves_corregido <- aves_sag %>% 
-                  mutate(orden = case_when( 
-                    orden_sag != revision_taxonomica_sag$order 
-                                ~ revision_taxonomica_sag$order,
-                    orden_sag == revision_taxonomica_sag$order ~ orden_sag),
-                    familia = case_when(
-                      familia_sag != revision_taxonomica_sag$family ~ revision_taxonomica_sag$order,
-                      familia_sag == revision_taxonomica_sag$family ~  familia_sag),
-                    genero = revision_taxonomica_sag$genus,
-                    nombre_cientifico = case_when(
-                      nombre_cientifico_sag != revision_taxonomica_sag$canonicalName
-                      ~ revision_taxonomica_sag$canonicalName, 
-                      nombre_cientifico_sag == revision_taxonomica_sag$canonicalName
-                      ~ nombre_cientifico_sag
-                    ))
+print(grafico_category_source)
 
 
+#gráfico comparativo-----
+#-----
+#selección de ocurrencias de GBIF
+gbif_taxa <- taxon_check %>% 
+  filter(preferred_source == "GBIF")
+  
+#selección de datos preferidos-----
+taxon_df<-gbif_taxa
+print(colnames(taxon_df))
+columns_to_keep<- c("scientificName","Long" ,"Lat","Category")
+taxon_df<-taxon_df[columns_to_keep]
 
+#gráfico por categoría----- 
+#paleta de colores
+color_category <- c(
+  "Antarctica" = "#1F78B4",
+  "Antarctica/Subantarctica" = "yellow",
+  "Temperate" = "#E31A1C")
+
+grafico_category <- taxon_df %>%
+  count(Category) %>%
+  ggplot(aes(x = Category, y = n, fill = Category)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  scale_fill_manual(values = color_category) +
+  labs(title = "Número de registros por categoría",
+    x = "Categoría",
+    y = "Número de registros") +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "none",
+    axis.text.x = element_text(angle = 25, hjust = 1)
+  )
+
+print(grafico_category)
+
+## FIN EJEMPLO
 
